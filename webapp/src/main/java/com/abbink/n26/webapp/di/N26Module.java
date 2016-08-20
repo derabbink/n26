@@ -9,6 +9,7 @@ import com.abbink.n26.common.jersey.OverrideInputTypeResourceFilterFactory;
 import com.abbink.n26.common.jersey.di.JerseyModule;
 import com.abbink.n26.common.metrics.di.MetricsModule;
 import com.abbink.n26.common.metrics.response.HttpStatusCodeMetricResourceFilterFactory;
+import com.abbink.n26.service.di.ServiceModule;
 import com.google.inject.servlet.ServletModule;
 import com.sun.jersey.api.core.ResourceConfig;
 import com.sun.jersey.guice.spi.container.servlet.GuiceContainer;
@@ -24,8 +25,8 @@ public class N26Module extends ServletModule {
 		install(new ConfigModule());
 		
 		install(new MetricsModule());
-//		install(new DataModule());
 		install(new JerseyModule());
+		install(new ServiceModule());
 		
 		// hook Jersey into Guice Servlet
 		bind(GuiceContainer.class);
