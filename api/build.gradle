@@ -1,0 +1,13 @@
+apply plugin: 'war'
+
+dependencies {
+	compile project(':common')
+	compile project(':service')
+	compile 'com.fasterxml.jackson.core:jackson-core:2.8.1'
+	compile 'com.fasterxml.jackson.core:jackson-databind:2.8.1'
+	compile 'com.fasterxml.jackson.core:jackson-annotations:2.8.1'
+	// must stay below v2.8.0, or the app will crash on launch with a java.lang.NoClassDefFoundError: javax/ws/rs/core/NoContentException
+	compile 'com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.7.5'
+	
+	providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
+}

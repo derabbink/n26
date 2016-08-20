@@ -1,0 +1,13 @@
+<web-app>
+	<listener>
+		<listener-class>com.abbink.n26.webapp.N26ServletContextListener</listener-class>
+	</listener>
+	<filter>
+		<filter-name>GuiceFilter</filter-name>
+		<filter-class>com.google.inject.servlet.GuiceFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>GuiceFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+</web-app>
