@@ -1,0 +1,18 @@
+# Java
+*.class
+*.jar
+*.war
+*.ear
+
+# Gradle
+.gradle
+build/
+
+# Eclipse
+.project
+.classpath
+.metadata
+.settings/
+bin/
+tmp/
+
