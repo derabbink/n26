@@ -33,7 +33,23 @@ curl -G 'http://localhost:8080/transactionservice/sum/-1'
 curl -G 'http://localhost:8080/transactionservice/sum/a'
 curl -G 'http://localhost:8080/transactionservice/types/z'
 
-# attempting to create some invalid data:
-curl -X PUT -d '{"amount":  1, "type": ""}' 'http://localhost:8080/transactionservice/transaction/0'
-curl -X PUT -d '{"amount":  1, "type": "x", "parent_id": -1}' 'http://localhost:8080/transactionservice/transaction/0'
+# attempting to create some invalid data (the API will refuse all these):
+curl -X PUT -d '{"amount": 1, "type": "x"}' 'http://localhost:8080/transactionservice/transaction/a'
+curl -X PUT -d '{"amount": 1, "type": ""}' 'http://localhost:8080/transactionservice/transaction/0'
+curl -X PUT -d '{"amount": 1, "type": "x", "parent_id": -1}' 'http://localhost:8080/transactionservice/transaction/0'
 
+# updating some data that was previously created:
+curl -X PUT -d '{"amount": 116, "type": "x"}' 'http://localhost:8080/transactionservice/transaction/5'
+curl -X PUT -d '{"amount": 102, "type": "x", "parent_id": 102}' 'http://localhost:8080/transactionservice/transaction/2'
+
+# verify the results:
+curl -G 'http://localhost:8080/transactionservice/transaction/5'
+curl -G 'http://localhost:8080/transactionservice/transaction/2'
+curl -G 'http://localhost:8080/transactionservice/sum/5'
+curl -G 'http://localhost:8080/transactionservice/sum/2'
+curl -G 'http://localhost:8080/transactionservice/sum/1'
+curl -G 'http://localhost:8080/transactionservice/sum/102'
+curl -G 'http://localhost:8080/transactionservice/sum/101'
+curl -G 'http://localhost:8080/transactionservice/types/a'
+curl -G 'http://localhost:8080/transactionservice/types/b'
+curl -G 'http://localhost:8080/transactionservice/types/x'
