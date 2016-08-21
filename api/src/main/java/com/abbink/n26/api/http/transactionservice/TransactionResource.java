@@ -14,7 +14,7 @@ import javax.ws.rs.core.MediaType;
 import lombok.extern.slf4j.Slf4j;
 
 import com.abbink.n26.api.http.JsonTransaction;
-import com.abbink.n26.api.http.SuccessResult;
+import com.abbink.n26.api.http.StatusResult;
 import com.abbink.n26.common.jersey.aop.OverrideInputType;
 import com.abbink.n26.service.TransactionService;
 import com.abbink.n26.service.data.Transaction;
@@ -30,13 +30,13 @@ public class TransactionResource {
 	@PUT
 //	@Consumes(MediaType.APPLICATION_JSON)
 	@OverrideInputType(MediaType.APPLICATION_JSON)
-	public SuccessResult put(
+	public StatusResult put(
 		@PathParam("id") long id,
 		JsonTransaction transaction
 	) {
 		log.trace("PUT {}, {}, {}", transaction.getAmount(), transaction.getType(), transaction.getParentId());
 		transactionService.storeTransaction(id, transaction.toTransaction());
-		return new SuccessResult(true);
+		return new StatusResult(true);
 	}
 	
 	@GET
