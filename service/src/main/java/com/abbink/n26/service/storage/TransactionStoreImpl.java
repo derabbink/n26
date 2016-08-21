@@ -45,7 +45,7 @@ public class TransactionStoreImpl implements TransactionStore {
 		if (contains(id)) {
 			throw new StorageError("Duplicate entry for id " + id);
 		}
-		if (!contains(t.getParentId())) {
+		if (t.getParentId() != null && !contains(t.getParentId())) {
 			throw new StorageError("Parent id " + id + " does not exist");
 		}
 		
@@ -65,19 +65,18 @@ public class TransactionStoreImpl implements TransactionStore {
 		}
 		
 		Transaction oldT = get(id);
-		double amount = t.getAmount() - oldT.getAmount();
+		double amountDelta = t.getAmount() - oldT.getAmount();
+		double sum = sumsBySubtree.get(id);
 		if (oldT.getParentId() == t.getParentId()) {
 			if (oldT.getAmount() != t.getAmount()) {
-				propagateSum(amount, t.getParentId());
+				propagateSum(amountDelta, t.getParentId());
 			}
 		} else {
-			double sum = sumsBySubtree.get(id);
 			propagateSum(-sum, oldT.getParentId());
-			propagateSum(t.getAmount(), t.getParentId());
+			propagateSum(sum + amountDelta, t.getParentId());
 		}
 		transactions.put(id, t);
-		amount += sumsBySubtree.get(id);
-		sumsBySubtree.put(id, amount);
+		sumsBySubtree.put(id, sum + amountDelta);
 	}
 	
 	/**
@@ -86,7 +85,7 @@ public class TransactionStoreImpl implements TransactionStore {
 	 */
 	public double getSubtreeSum(long rootId) {
 		if (!contains(rootId)) {
-			throw new StorageError("Entry with id " + rootId + "does not exist");
+			throw new StorageError("Entry with id " + rootId + " does not exist");
 		}
 		
 		return sumsBySubtree.get(rootId);

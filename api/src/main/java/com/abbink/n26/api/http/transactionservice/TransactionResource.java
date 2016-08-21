@@ -13,6 +13,7 @@ import javax.ws.rs.core.MediaType;
 
 import lombok.extern.slf4j.Slf4j;
 
+import com.abbink.n26.api.error.InvalidInputError;
 import com.abbink.n26.api.http.JsonTransaction;
 import com.abbink.n26.api.http.StatusResult;
 import com.abbink.n26.common.jersey.aop.OverrideInputType;
@@ -35,6 +36,12 @@ public class TransactionResource {
 		JsonTransaction transaction
 	) {
 		log.trace("PUT {}, {}, {}", transaction.getAmount(), transaction.getType(), transaction.getParentId());
+		// This should probably be more sophisticated and allow only characters that fit in a URL-path:
+		String type = transaction.getType().trim();
+		if (type.isEmpty()) {
+			throw new InvalidInputError();
+		}
+		transaction = new JsonTransaction(transaction.getAmount(), type, transaction.getParentId());
 		transactionService.storeTransaction(id, transaction.toTransaction());
 		return new StatusResult(true);
 	}

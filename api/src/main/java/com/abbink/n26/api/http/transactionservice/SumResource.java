@@ -14,6 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.abbink.n26.api.http.SumResult;
 import com.abbink.n26.service.TransactionService;
+import com.abbink.n26.service.storage.StorageError;
+import com.sun.jersey.api.NotFoundException;
 
 @Slf4j
 @Singleton
@@ -23,9 +25,14 @@ public class SumResource {
 	@Inject private TransactionService transactionService;
 	
 	@GET
-	public SumResult get(@PathParam("type") long id) {
+	public SumResult get(@PathParam("id") long id) {
 		log.trace("GET {}", id);
-		double sum = transactionService.getTransactionSumForSubtree(id);
-		return new SumResult(sum);
+		try {
+			double sum = transactionService.getTransactionSumForSubtree(id);
+			return new SumResult(sum);
+		} catch (StorageError e) {
+			throw new NotFoundException();
+		}
+		
 	}
 }

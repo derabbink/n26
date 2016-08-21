@@ -1,0 +1,39 @@
+# Some cURL commands to quickly get started with the web service
+
+# creating two trees of linked transaction. all of these should respond with a {"status":"ok"} body:
+curl -X PUT -d '{"amount":  1, "type": "a"}' 'http://localhost:8080/transactionservice/transaction/1'
+curl -X PUT -d '{"amount":  2, "type": "a", "parent_id": 1}' 'http://localhost:8080/transactionservice/transaction/2'
+curl -X PUT -d '{"amount":  4, "type": "a", "parent_id": 1}' 'http://localhost:8080/transactionservice/transaction/3'
+curl -X PUT -d '{"amount":  8, "type": "a", "parent_id": 2}' 'http://localhost:8080/transactionservice/transaction/4'
+curl -X PUT -d '{"amount": 16, "type": "a", "parent_id": 2}' 'http://localhost:8080/transactionservice/transaction/5'
+curl -X PUT -d '{"amount": 32, "type": "a", "parent_id": 3}' 'http://localhost:8080/transactionservice/transaction/6'
+curl -X PUT -d '{"amount": 64, "type": "a", "parent_id": 3}' 'http://localhost:8080/transactionservice/transaction/7'
+curl -X PUT -d '{"amount":  1, "type": "b"}' 'http://localhost:8080/transactionservice/transaction/101'
+curl -X PUT -d '{"amount":  2, "type": "b", "parent_id": 101}' 'http://localhost:8080/transactionservice/transaction/102'
+curl -X PUT -d '{"amount":  4, "type": "b", "parent_id": 101}' 'http://localhost:8080/transactionservice/transaction/103'
+curl -X PUT -d '{"amount":  8, "type": "b", "parent_id": 102}' 'http://localhost:8080/transactionservice/transaction/104'
+curl -X PUT -d '{"amount": 16, "type": "b", "parent_id": 102}' 'http://localhost:8080/transactionservice/transaction/105'
+curl -X PUT -d '{"amount": 32, "type": "b", "parent_id": 102}' 'http://localhost:8080/transactionservice/transaction/106'
+
+# reading back some input data:
+curl -G 'http://localhost:8080/transactionservice/transaction/1'
+curl -G 'http://localhost:8080/transactionservice/sum/1'
+curl -G 'http://localhost:8080/transactionservice/types/a'
+
+curl -G 'http://localhost:8080/transactionservice/transaction/101'
+curl -G 'http://localhost:8080/transactionservice/sum/101'
+curl -G 'http://localhost:8080/transactionservice/types/b'
+
+# attempting to read something that doesn't (yet) exist:
+curl -G 'http://localhost:8080/transactionservice/transaction/0'
+curl -G 'http://localhost:8080/transactionservice/transaction/-1'
+curl -G 'http://localhost:8080/transactionservice/transaction/a'
+curl -G 'http://localhost:8080/transactionservice/sum/0'
+curl -G 'http://localhost:8080/transactionservice/sum/-1'
+curl -G 'http://localhost:8080/transactionservice/sum/a'
+curl -G 'http://localhost:8080/transactionservice/types/z'
+
+# attempting to create some invalid data:
+curl -X PUT -d '{"amount":  1, "type": ""}' 'http://localhost:8080/transactionservice/transaction/0'
+curl -X PUT -d '{"amount":  1, "type": "x", "parent_id": -1}' 'http://localhost:8080/transactionservice/transaction/0'
+

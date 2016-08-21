@@ -22,6 +22,13 @@ public class TypeStoreImpl implements TypeStore {
 		idsByType = HashMultimap.create();
 	}
 	
+	/**
+	 * exists solely for testing
+	 */
+	Multimap<String, Long> getIdsByType() {
+		return idsByType;
+	}
+	
 	@Override
 	public boolean contains(String type, long id) {
 		return idsByType.containsEntry(type, id);
